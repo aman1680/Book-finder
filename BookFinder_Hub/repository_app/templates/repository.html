@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../static/styles.css">
+    <script src="../../static/script.js"></script>
+</head>
+<body>
+    {% include "header.html" %}
+
+    <div class="repo-container">
+
+        <h1>Repository Webpage</h1>
+
+        <div class="option-menu">
+                <label for="task-select">Choose a task:</label>
+                <select id="task-select" onchange="toggleForms()">
+                    <option value="select">Select an option</option>
+                    <option value="upload">Upload a File</option>
+                    <option value="search" {%if title != None %}selected{% endif %}>Search for a File</option>
+                </select>
+        </div>
+
+        
+        <div id="upload-form" class="task-form" style="display: none;"">
+            <form action="#" method="post" enctype="multipart/form-data" class="repo-form">
+                {% csrf_token %}
+                <div class="repo-form-group">
+                    <label for="title">Title:</label>
+                    <input type="text" id="title" name="title" required>
+                </div>
+                <div class="repo-form-group">
+                    <label for="file">File:</label>
+                    <input type="file" id="file" name="file" accept=".pdf" required>
+                </div>
+                <div class="repo-form-group">
+                    <input type="submit" value="Upload" id="upload">
+                </div>
+            </form>
+        </div>
+
+        <div id="search-form" class="task-form" {%if title == null %}style="display: none;{% endif %}">
+            <form method="GET" class="search-container">
+                <input type="text" placeholder="Search.." name="search" class="search-input" required="true" autocomplete="off">
+                <button type="submit" class="search-btn">Search</button>
+            </form>
+
+            <div class="search-results" id="search-results">
+                <div class="search-message">
+                    {% if title == '' or title == None %}
+                        No result found
+                    {% else %}
+                        {% if result|length == 0 %}No result found for '{{title}}'{% else %}{{result|length}} related result(s) found for '{{title}}'{% endif %}
+                    {% endif %}
+                </div>
+
+                {% for i in result %}
+                <div class="result-item">
+                    <h3>{{i.name}}</h3>
+                    <p>Description of Document 1. <a href="{{i.file.url}}" download>Download</a></p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
+    {% include "footer.html" %}
+    
+</body>
+    
+</html>
+
+

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/styles.css">
+    <script src="static/script.js"></script>
+    <title>BookFinder-Hub</title>
+</head>
+
+<body>
+
+    {% include "header.html" %}
+
+    <div class="wrapper">
+
+        <div class="form-container">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="input-field">
+                    <label for="book">Book Name</label>
+                    <input type="text" name="book" id="book" autocomplete="off">
+                </div>
+        
+                <div class="input-field">
+                    <label for="author">Author Name</label>
+                    <input type="text" name="author" id="author" autocomplete="off">
+                </div>
+                
+                <div class="input-field">
+                    <label for="isbn">Publisher</label>
+                    <input type="text" name="publisher" id="publisher" autocomplete="off">
+                </div>
+
+                <button type="submit">submit</button>
+            </form>
+        </div>
+
+        <hr id="line">
+            {% if available == True %}
+                {% for n in sites %}
+                    {% if n != null%}
+                        <div class="result-view-container">
+                            
+                            <div class="site" id="site">{{n.0.site}}</div>
+
+                            <div class="result-container">
+                                {% for i in n %}
+                                <div class="result">
+                                    <div class="image-div"><img src="{{i.image}}" alt="image" id="image"></div>
+                                    <a href="{{i.link}}">
+                                        <div class="description" id="desc">{{i.desc}}</div>
+                                        <div class="price" id="price">{{i.price}}</div>
+                                    </a>
+                                </div>
+                                {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+    </div>
+    
+    {% include "footer.html" %}
+
+</body>
+
+</html>
